@@ -83,6 +83,8 @@ struct test_env {
 	int skip_cnt; /* skipped tests */
 
 	int saved_netns_fd;
+
+	FILE* summary_errors;
 };
 
 extern struct test_env env;
