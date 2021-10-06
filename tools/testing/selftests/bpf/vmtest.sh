@@ -175,6 +175,7 @@ EOF
 echo "130" > "/root/${EXIT_STATUS_FILE}"
 
 {
+	ulimit -n 65535
 	cd /root/bpf
 	echo ${command}
 	stdbuf -oL -eL ${command}
@@ -224,13 +225,13 @@ EOF
 		-nodefaults \
 		-display none \
 		-serial mon:stdio \
-		-cpu kvm64 \
+		-cpu host \
 		-enable-kvm \
-		-smp 4 \
-		-m 2G \
+		-smp 16 \
+		-m 4G \
 		-drive file="${rootfs_img}",format=raw,index=1,media=disk,if=virtio,cache=none \
 		-kernel "${kernel_bzimage}" \
-		-append "root=/dev/vda rw console=ttyS0,115200"
+		-append "root=/dev/vda rw console=ttyS0,115200 clocksource=tsc tsc=prefect"
 }
 
 copy_logs()
