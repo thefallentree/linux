@@ -8,6 +8,10 @@
 #include <test_progs.h>
 #include "test_bpf_cookie.skel.h"
 
+static int method() {
+	return get_base_addr();
+}
+
 static void kprobe_subtest(struct test_bpf_cookie *skel)
 {
 	DECLARE_LIBBPF_OPTS(bpf_kprobe_opts, opts);
@@ -66,7 +70,7 @@ static void uprobe_subtest(struct test_bpf_cookie *skel)
 	ssize_t base_addr;
 
 	base_addr = get_base_addr();
-	uprobe_offset = get_uprobe_offset(&get_base_addr, base_addr);
+	uprobe_offset = get_uprobe_offset(&method, base_addr);
 
 	/* attach two uprobes */
 	opts.bpf_cookie = 0x100;
@@ -99,7 +103,7 @@ static void uprobe_subtest(struct test_bpf_cookie *skel)
 		goto cleanup;
 
 	/* trigger uprobe && uretprobe */
-	get_base_addr();
+	method();
 
 	ASSERT_EQ(skel->bss->uprobe_res, 0x100 | 0x200, "uprobe_res");
 	ASSERT_EQ(skel->bss->uretprobe_res, 0x1000 | 0x2000, "uretprobe_res");
@@ -193,7 +197,7 @@ static void pe_subtest(struct test_bpf_cookie *skel)
 	attr.type = PERF_TYPE_SOFTWARE;
 	attr.config = PERF_COUNT_SW_CPU_CLOCK;
 	attr.freq = 1;
-	attr.sample_freq = 4000;
+	attr.sample_freq = read_perf_max_sample_freq();
 	pfd = syscall(__NR_perf_event_open, &attr, -1, 0, -1, PERF_FLAG_FD_CLOEXEC);
 	if (!ASSERT_GE(pfd, 0, "perf_fd"))
 		goto cleanup;

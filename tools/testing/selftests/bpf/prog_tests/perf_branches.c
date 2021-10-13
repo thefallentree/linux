@@ -16,7 +16,7 @@ static void check_good_sample(struct test_perf_branches *skel)
 	int duration = 0;
 
 	if (CHECK(!skel->bss->valid, "output not valid",
-		 "no valid sample from prog"))
+		 "no valid sample from prog\n"))
 		return;
 
 	/*
@@ -46,7 +46,7 @@ static void check_bad_sample(struct test_perf_branches *skel)
 	int duration = 0;
 
 	if (CHECK(!skel->bss->valid, "output not valid",
-		 "no valid sample from prog"))
+		 "no valid sample from prog\n"))
 		return;
 
 	CHECK((required_size != -EINVAL && required_size != -ENOENT),
@@ -84,7 +84,7 @@ static void test_perf_branches_common(int perf_fd,
 	if (CHECK(err, "set_affinity", "cpu #0, err %d\n", err))
 		goto out_destroy;
 	/* spin the loop for a while (random high number) */
-	for (i = 0; i < 1000000; ++i)
+	for (i = 0; i < 100000000; ++i)
 		++j;
 
 	test_perf_branches__detach(skel);
@@ -110,7 +110,7 @@ static void test_perf_branches_hw(void)
 	attr.type = PERF_TYPE_HARDWARE;
 	attr.config = PERF_COUNT_HW_CPU_CYCLES;
 	attr.freq = 1;
-	attr.sample_freq = 4000;
+	attr.sample_freq = read_perf_max_sample_freq();
 	attr.sample_type = PERF_SAMPLE_BRANCH_STACK;
 	attr.branch_sample_type = PERF_SAMPLE_BRANCH_USER | PERF_SAMPLE_BRANCH_ANY;
 	pfd = syscall(__NR_perf_event_open, &attr, -1, 0, -1, PERF_FLAG_FD_CLOEXEC);
@@ -151,7 +151,7 @@ static void test_perf_branches_no_hw(void)
 	attr.type = PERF_TYPE_SOFTWARE;
 	attr.config = PERF_COUNT_SW_CPU_CLOCK;
 	attr.freq = 1;
-	attr.sample_freq = 4000;
+	attr.sample_freq = read_perf_max_sample_freq();
 	pfd = syscall(__NR_perf_event_open, &attr, -1, 0, -1, PERF_FLAG_FD_CLOEXEC);
 	if (CHECK(pfd < 0, "perf_event_open", "err %d\n", pfd))
 		return;
