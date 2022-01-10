@@ -38,7 +38,7 @@ static int fentry_test(struct fentry_test_lskel *fentry_skel)
 	return 0;
 }
 
-void test_fentry_test(void)
+void serial_test_fentry_test(void)
 {
 	struct fentry_test_lskel *fentry_skel = NULL;
 	int err;

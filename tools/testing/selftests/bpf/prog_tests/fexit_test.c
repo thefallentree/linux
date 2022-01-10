@@ -38,7 +38,7 @@ static int fexit_test(struct fexit_test_lskel *fexit_skel)
 	return 0;
 }
 
-void test_fexit_test(void)
+void serial_test_fexit_test(void)
 {
 	struct fexit_test_lskel *fexit_skel = NULL;
 	int err;

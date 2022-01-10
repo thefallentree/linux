@@ -4,7 +4,7 @@
 #include "fentry_test.lskel.h"
 #include "fexit_test.lskel.h"
 
-void test_fentry_fexit(void)
+void serial_test_fentry_fexit(void)
 {
 	struct fentry_test_lskel *fentry_skel = NULL;
 	struct fexit_test_lskel *fexit_skel = NULL;

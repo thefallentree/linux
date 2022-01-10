@@ -23,7 +23,7 @@ static int do_sleep(void *skel)
 #define STACK_SIZE (1024 * 1024)
 static char child_stack[STACK_SIZE];
 
-void test_fexit_sleep(void)
+void serial_test_fexit_sleep(void)
 {
 	struct fexit_sleep_lskel *fexit_skel = NULL;
 	int wstatus, duration = 0;
