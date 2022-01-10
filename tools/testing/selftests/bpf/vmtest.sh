@@ -18,7 +18,7 @@ s390x)
 x86_64)
 	QEMU_BINARY=qemu-system-x86_64
 	QEMU_CONSOLE="ttyS0,115200"
-	QEMU_FLAGS=(-cpu host -smp 8)
+	QEMU_FLAGS=(-cpu host,vmx=off -smp $(nproc))
 	BZIMAGE="arch/x86/boot/bzImage"
 	;;
 *)
@@ -241,7 +241,7 @@ EOF
 		-nodefaults \
 		-display none \
 		-serial mon:stdio \
-		"${qemu_flags[@]}" \
+		"${QEMU_FLAGS[@]}" \
 		-enable-kvm \
 		-m 4G \
 		-drive file="${rootfs_img}",format=raw,index=1,media=disk,if=virtio,cache=none \
