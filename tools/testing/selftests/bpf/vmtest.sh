@@ -26,7 +26,7 @@ x86_64)
 	exit 1
 	;;
 esac
-DEFAULT_COMMAND="./test_progs"
+DEFAULT_COMMAND="./test_progs -j"
 MOUNT_DIR="mnt"
 ROOTFS_IMAGE="root.img"
 OUTPUT_DIR="$HOME/.bpf_selftests"
